@@ -1,0 +1,20 @@
+fun main() {
+    println("Enter the wholesale cost of the item:")
+    val wholesaleCost = readLine()?.toDoubleOrNull()
+
+    println("Enter the markup percentage:")
+    val markupPercentage = readLine()?.toDoubleOrNull()
+
+    if (wholesaleCost != null && markupPercentage != null) {
+        val retailPrice = calculateRetail(wholesaleCost, markupPercentage)
+        println("The retail price of the item is $retailPrice")
+    } else {
+        println("Invalid input. Please enter valid numbers.")
+    }
+}
+
+fun calculateRetail(wholesaleCost: Double, markupPercentage: Double): Double {
+    val markupAmount = wholesaleCost * (markupPercentage / 100)
+    val retailPrice = wholesaleCost + markupAmount
+    return retailPrice
+}
