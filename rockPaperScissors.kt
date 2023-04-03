@@ -1,73 +1,40 @@
 fun main() {
-    var continuePlaying = true
-    while (continuePlaying) {
-        val computerChoice = generateComputerChoice()
-        val userChoice = getUserChoice()
-        val winner = determineWinner(userChoice, computerChoice)
-        displayResults(userChoice, computerChoice, winner)
-        continuePlaying = promptToPlayAgain()
-    }
+    val computerChoice = getComputerChoice()
+    val userChoice = getUserChoice()
+    printChoices(computerChoice, userChoice)
+    determineWinner(computerChoice, userChoice)
 }
 
-fun generateComputerChoice(): String {
-    val choice = Random.nextInt(1, 4)
-    return when (choice) {
+fun getComputerChoice(): String {
+    val randomNumber = Random.nextInt(1, 4)
+    return when (randomNumber) {
         1 -> "rock"
         2 -> "paper"
-        3 -> "scissors"
-        else -> throw IllegalArgumentException("Invalid choice: $choice")
+        else -> "scissors"
     }
 }
 
 fun getUserChoice(): String {
-    println("Choose rock, paper, or scissors:")
-    var input: String? = null
-    while (input == null) {
-        input = readLine()?.trim()?.toLowerCase()
-        if (input !in setOf("rock", "paper", "scissors")) {
-            println("Invalid input. Please choose rock, paper, or scissors:")
-            input = null
-        }
+    println("Please enter your choice (rock/paper/scissors): ")
+    var userInput = readLine()
+    while (userInput != "rock" && userInput != "paper" && userInput != "scissors") {
+        println("Invalid choice. Please enter rock, paper, or scissors: ")
+        userInput = readLine()
     }
-    return input
+    return userInput
 }
 
-fun determineWinner(userChoice: String, computerChoice: String): String? {
-    if (userChoice == computerChoice) {
-        return null // Tie
-    }
-    return when (userChoice) {
-        "rock" -> if (computerChoice == "scissors") "user" else "computer"
-        "paper" -> if (computerChoice == "rock") "user" else "computer"
-        "scissors" -> if (computerChoice == "paper") "user" else "computer"
-        else -> throw IllegalArgumentException("Invalid choice: $userChoice")
-    }
-}
-
-fun displayResults(userChoice: String, computerChoice: String, winner: String?) {
+fun printChoices(computerChoice: String, userChoice: String) {
     println("You chose $userChoice.")
     println("The computer chose $computerChoice.")
-    if (winner == null) {
-        println("It's a tie!")
-    } else {
-        println("${winner.capitalize()} wins!")
-    }
 }
 
-fun promptToPlayAgain(): Boolean {
-    println("Do you want to play again? (y/n)")
-    var input: String? = null
-    while (input == null) {
-        input = readLine()?.trim()?.toLowerCase()
-        when (input) {
-            "y" -> return true
-            "n" -> return false
-            else -> {
-                println("Invalid input. Please enter y or n.")
-                input = null
-            }
-        }
+fun determineWinner(computerChoice: String, userChoice: String) {
+    when {
+        computerChoice == userChoice -> println("It's a tie!")
+        computerChoice == "rock" && userChoice == "scissors" -> println("You lose. Rock smashes scissors.")
+        computerChoice == "scissors" && userChoice == "paper" -> println("You lose. Scissors cut paper.")
+        computerChoice == "paper" && userChoice == "rock" -> println("You lose. Paper wraps rock.")
+        else -> println("You win!")
     }
-    return false 
 }
-main()
